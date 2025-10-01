@@ -12,12 +12,18 @@ class BaseParser(abc.ABC):
 
     def __init__(self, source):
         self.source = source
-        self.name = self.__name__
+        self.name = "BaseParser"
 
     @abc.abstractmethod
     def parse(self) -> List[Dict]:
         """Основной метода парсинга - его описываем в дочерках."""
         pass
+
+    def clean_text(self, text: str) -> str:
+        """Очистка текста от лишних пробелов и символов"""
+        if not text:
+            return ""
+        return ' '.join(text.split())
 
     def save_news_item(self, news_data: Dict) -> Optional["NewsItem"]:
 

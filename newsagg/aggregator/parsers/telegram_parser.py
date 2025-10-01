@@ -8,6 +8,10 @@ from .base_parser import BaseParser
 class TelegramParser(BaseParser):
     """Парсер Telegram каналов"""
 
+    def __init__(self, source):
+        super().__init__(source)
+        self.name = "TelegramParser"
+
     def parse(self) -> List[Dict]:
         """Синхронный метод парсинга (запускает асинхронный)"""
         try:
@@ -24,9 +28,8 @@ class TelegramParser(BaseParser):
             from telethon import TelegramClient
             from telethon.errors import ChannelPrivateError
 
-            # Настройки Telegram API (вынеси в settings.py позже)
-            api_id = 'YOUR_API_ID'  # Получи на my.telegram.org
-            api_hash = 'YOUR_API_HASH'
+            api_id = '25958394'
+            api_hash = 'e8e5db077b49e97192f08cd90a9494b2'
 
             client = TelegramClient('session_name', api_id, api_hash)
 
@@ -36,7 +39,7 @@ class TelegramParser(BaseParser):
                 try:
                     async for message in client.iter_messages(
                         self.source.username,
-                        limit=100,
+                        limit=50,
                         offset_date=since_date
                     ):
                         if message.text and len(message.text.strip()) > 50:
