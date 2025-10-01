@@ -3,19 +3,15 @@ from django.db import models
 
 class NewsSource(models.Model):
     """Хранение новостей"""
-    name = models.CharField(max_length=200, verbose_name="Источник")
-    url = models.URLField(verbose_name="URL источника")
-    source_type = models.CharField(
-        max_length=50,
-        choices=[
-            ('rss', 'RSS'),
-            ('telegram', 'Telegram'),
-            ('api', 'API'),
-        ],
-        verbose_name="Тип источника"
-    )
+    SOURCE_TYPES = [
+        ('telegram', 'Telegram'),
+    ]
+    name = models.CharField(max_length=200, verbose_name="Название канала")
+    username = models.CharField(max_length=100, verbose_name="Username канала")
+    url = models.URLField(verbose_name="URL канала", blank=True)
+    source_type = models.CharField(max_length=20, choices=SOURCE_TYPES, default='telegram', verbose_name="Тип источника")
     is_active = models.BooleanField(default=True, verbose_name="Активен")
-    created_at = models.DateTimeField(auto_now_add=True)
+    last_parsed = models.DateTimeField(null=True, blank=True, verbose_name="Последний парсинг")
 
     def __str__(self):
         return self.name
