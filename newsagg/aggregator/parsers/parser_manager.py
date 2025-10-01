@@ -24,7 +24,7 @@ class ParserManager:
         total_news = 0
         active_sources = NewsSource.objects.filter(is_active=True)
 
-        print(f"🔍 Начинаем парсинг {active_sources.count()} источников...")
+        print(f"Начинаем парсинг {active_sources.count()} источников...")
 
         for source in active_sources:
             parser = self.get_parser(source)
@@ -43,5 +43,5 @@ class ParserManager:
                 except Exception as e:
                     print(f"Ошибка парсинга {source.name}: {e}")
 
-        print(f"🎉 Парсинг завершен! Всего добавлено {total_news} новостей")
+        print(f"Парсинг завершен! Всего добавлено {total_news} новостей")
         return total_news
