@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Лента — Pulse{% endblock %}
+
+{% block content %}
+<div class="hero mb-4">
+  <div class="container">
+    <h1 class="hero-title">Лента новостей</h1>
+    <p class="hero-lead">Короткие, понятные сводки из ваших источников — быстро понять суть.</p>
+  </div>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="list-stack">
+      {% for item in news %}
+      <article class="news-item card mb-3">
+        <div class="card-body d-flex flex-column">
+          <!-- В ленте показываем только summary -->
+          <p class="news-summary mb-3">{{ item.summary }}</p>
+
+          <div class="d-flex justify-content-between align-items-center mt-auto">
+            <div class="meta text-muted small">
+              {{ item.source.name }} • {{ item.published_date|date:"d M Y, H:i" }}
+            </div>
+            <div>
+              <button class="btn btn-sm btn-primary"
+                hx-get="{% url 'news_detail_card' item.id %}"
+                hx-target="#modal-body"
+                hx-trigger="click"
+                data-bs-toggle="modal"
+                data-bs-target="#newsModal">
+                Читать
+              </button>
+            </div>
+          </div>
+        </div>
+      </article>
+      {% empty %}
+        <div class="card"><div class="card-body">Новостей пока нет</div></div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<!-- Модалка (Bootstrap) -->
+<div class="modal fade" id="newsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h5 class="modal-title">Новость</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- htmx сюда вставит news_card.html -->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

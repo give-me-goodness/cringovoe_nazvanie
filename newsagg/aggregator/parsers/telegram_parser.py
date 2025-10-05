@@ -31,9 +31,13 @@ class TelegramParser(BaseParser):
             api_id = '25958394'
             api_hash = 'e8e5db077b49e97192f08cd90a9494b2'
 
-            client = TelegramClient('session_name', api_id, api_hash)
+            # уникальное имя файла сессии для каждого источника
+            session_name = f"session_{self.source.username}"
+            client = TelegramClient(session_name, api_id, api_hash)
 
             async with client:
+                await client.start()  # явно стартуем сессию
+
                 since_date = datetime.now() - timedelta(hours=24)
 
                 try:
