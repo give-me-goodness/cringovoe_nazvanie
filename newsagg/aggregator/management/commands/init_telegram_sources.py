@@ -34,7 +34,8 @@ class Command(BaseCommand):
                 defaults={
                     'name': channel_data['name'],
                     'url': url,
-                    'source_type': 'telegram'
+                    'source_type': 'telegram',
+                    'is_active': True
                 }
             )
 

@@ -31,15 +31,26 @@ class TelegramParser(BaseParser):
             api_id = '25958394'
             api_hash = 'e8e5db077b49e97192f08cd90a9494b2'
 
-            client = TelegramClient('session_name', api_id, api_hash)
+            client = TelegramClient(
+                'session_name',
+                api_id=api_id,
+                api_hash=api_hash,
+                device_model="iPhone 55 Pro",
+                system_version="IOS 228",
+                app_version="8.9.0",
+                lang_code="ru",
+                system_lang_code="ru-ru"
+                )
 
             async with client:
                 since_date = datetime.now() - timedelta(hours=24)
 
                 try:
+                    await asyncio.sleep(5)
+
                     async for message in client.iter_messages(
                         self.source.username,
-                        limit=50,
+                        limit=10,
                         offset_date=since_date
                     ):
                         if message.text and len(message.text.strip()) > 50:
