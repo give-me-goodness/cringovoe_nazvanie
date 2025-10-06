@@ -17,13 +17,16 @@ body {
 /* --- ФОН С ФОТО (замена градиента) --- */
 .gradient-bg {
   position: fixed;
-  inset: 0;
-  //background-image: url("/static/images/South-Caucasus.jpg");
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/static/images/South-Caucasus.jpg");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   background-repeat: no-repeat;
-  z-index: -2;
+  z-index: -1;
   /* Лёгкий тёмный overlay для всей страницы (чтобы текст не сливался) */
   //background-color: rgba(0, 0, 0, 0.5); /* Прозрачность — подкорректируй под фото */
   /*!* Fallback на старый градиент, если фото не загрузится *!*/
@@ -31,81 +34,65 @@ body {
   /*            url("/static/images/South-Caucasus.jpg");*/
 }
 
-/* --- ПОЛУПРОЗРАЧНАЯ КОЛОНКА --- */
-.content-overlay {
-  max-width: 700px;
-  margin: 4vh auto;
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(1px);
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.1);
-  border-radius: 16px;
-  padding-bottom: 5rem;
-  min-height: calc(100vh - 8vh);
-}
-
 /* --- ШАПКА И ЛОГОТИП --- */
-/* --- ХЕДЕР --- */
-.site-header {
-  text-align: center;
-  padding-top: 3rem;
-  padding-bottom: 2rem;
-}
-
 .site-header .logo {
   font-weight: 700;
-  font-size: 2.3rem;
-  letter-spacing: -0.03em;
-  color: #3D4732;
-  //position: relative;
-  //display: inline-block;
+  font-size: 2.2rem;
+  letter-spacing: -0.04em;
+  color: #556049;
+  position: relative;
+  display: inline-block;
 }
 
 .site-header .tagline {
   font-size: 1rem;
-  color: #ffffff;
-  margin-top: 0.3rem;
+  color: #8D9981;
+  margin-top: 0.2rem;
 }
 
-/* --- ЛЕНТА --- */
+/* --- ОСНОВНАЯ КОЛОНКА --- */
 .feed-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+  max-width: 680px;
+  margin: 1rem auto;
+  padding: 0 1rem 5rem;
 }
 
 /* --- ЛЕНТА И КАРТОЧКИ НОВОСТЕЙ --- */
 .news-feed {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
+  gap: 1.25rem;
 }
 
 .news-card {
-  background: #ffffffb5;
+  background: #FFFFFF; /* Чистый белый фон карточки */
   backdrop-filter: blur(15px);
-  border-radius: 14px;
-  padding: 1.5rem;
-  border: 1px solid #eee;
-  transition: all 0.25s ease;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+  border-radius: 12px;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid #F0F0F0; /* Очень светлая серая граница */
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.03); /* Минимальная тень */
+  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out;
+  cursor: pointer;
 }
 
 .news-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.05); /* Более заметная тень при наведении */
+  border-color: #E0E0E0;
 }
 
 .news-card .summary p {
-  font-size: 1.05rem;
-  line-height: 1.6;
+  font-size: 1.1rem;
+  line-height: 1.65;
+  color: #3D4732;
   margin: 0;
-  color: #2c3427;
 }
 
 .news-card .meta {
+  display: block;
   margin-top: 1rem;
   font-size: 0.9rem;
-  color: #76836b;
+  color: #8D9981;
 }
 
 .news-card .meta strong {
@@ -153,17 +140,20 @@ body {
 .read-more {
   text-decoration: none;
   font-weight: 600;
-  background: linear-gradient(90deg, #93A87D, #7E936B);
-  color: #fff;
-  padding: 0.6rem 1.4rem;
+  font-size: 0.95rem;
+  background-image: linear-gradient(100deg, #93A87D, #7E936B);
+  color: white;
+  padding: 0.8rem 1.8rem;
   border-radius: 8px;
+  transition: all 0.25s ease;
   display: inline-block;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 4px 15px rgba(147, 168, 125, 0.4);
 }
 
 .read-more:hover {
   transform: translateY(-2px);
   opacity: 0.9;
+  box-shadow: 0 7px 20px rgba(147, 168, 125, 0.5);
 }
 
 /* --- КАСТОМИЗАЦИЯ СКРОЛЛБАРА --- */
@@ -174,47 +164,53 @@ body {
   background: #fcfcfc;
 }
 ::-webkit-scrollbar-thumb {
-  background: #bbb;
-  border-radius: 3px;
+  background: #E5E5E5; /* Очень светлый серый */
+  border-radius: 10px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: #CCCCCC;
 }
 
 /*!* --- АДАПТИВНОСТЬ (Темная тема) --- *!*/
-/* --- ТЁМНАЯ ТЕМА --- */
-@media (prefers-color-scheme: dark) {
-  body {
-    color: #E8EEDF;
-  }
+/*@media (prefers-color-scheme: dark) {*/
+/*  !* Темный режим остается мягким *!*/
+/*  body {*/
+/*    color: #E8EEDF;*/
+/*    background-color: #1F251A;*/
+/*  }*/
 
-  .content-overlay {
-    background: rgba(25, 30, 20, 0.6);
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.4);
-  }
+/*  .gradient-bg {*/
+/*    background: radial-gradient(circle at 30% 30%, #303B26 0%, rgba(31, 37, 26, 0) 60%);*/
+/*    opacity: 0.8;*/
+/*  }*/
 
-  .site-header .logo {
-    color: #F7F7F0;
-  }
+/*  .site-header .logo { color: #F7F7F0; }*/
+/*  .site-header .tagline { color: #A8B899; }*/
 
-  .news-card {
-    background: rgba(45, 55, 38, 0.7);
-    border-color: #405035;
-  }
+/*  .news-card {*/
+/*    background: rgba(45, 55, 38, 0.7);*/
+/*    border-color: #405035;*/
+/*  }*/
 
-  .news-card .summary p {
-    color: #E8EEDF;
-  }
+/*  .news-card:hover {*/
+/*    border-color: #607550;*/
+/*  }*/
 
-  .news-card .meta {
-    color: #A8B899;
-  }
+/*  .news-card .summary p { color: #F0F5E7; }*/
+/*  .news-card .meta { color: #A8B899; }*/
+/*  .news-card .meta strong { color: #C5D0BA; }*/
 
-  .read-more {
-    background: linear-gradient(90deg, #A7BF8A, #93A87D);
-  }
-}
+/*  .modal-content {*/
+/*    background-color: #2D3524;*/
+/*    box-shadow: 0 10px 40px rgba(0,0,0,0.3);*/
+/*  }*/
+
+/*  .btn-close { filter: invert(1); }*/
+
+/*  .news-full h2 { color: #F7F7F0; }*/
+/*  .news-full .meta { color: #A8B899; }*/
+/*  .news-full .content { color: #D7E0C9; }*/
+/*}*/
 
 /*!* --- СТИЛИ ДЛЯ ПЕРЕКЛЮЧАТЕЛЯ ВКЛАДОК (SEGMENTED CONTROL) --- *!*/
 .segmented-control-container {
@@ -258,7 +254,13 @@ body {
 }
 
 .filter-bar {
-  margin-bottom: 2rem;
+  margin: 2rem auto 2.5rem; /* отступ сверху и снизу */
+  padding: 1rem 1.5rem;     /* внутренние отступы */
+  background-color: rgba(40, 40, 40, 0.6);
+  border-radius: 20px;      /* плавное скругление */
+  backdrop-filter: blur(1px); /* лёгкое размытие под фоном */
+  width: fit-content;       /* чтобы ширина подстраивалась под кнопки */
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15); /* мягкая тень */
 }
 
 .filter-buttons {
@@ -271,7 +273,7 @@ body {
 .filter-btn {
   background-color: rgba(119, 136, 153, 0.29);
   border: 1px solid #E0E0E0;
-  color: #85a178;
+  color: #aed59f;
   padding: 0.4rem 1rem;
   border-radius: 20px;
   font-size: 0.9rem;
