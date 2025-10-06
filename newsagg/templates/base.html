@@ -66,16 +66,35 @@
       });
     </script>
   <body>
+    <!-- ФОН -->
     <div class="gradient-bg"></div>
 
-    <header class="site-header text-center pt-5 pb-4">
-      <h1 class="logo">Νέα Хедлайн</h1>
-      <p class="tagline">Главные новости в одной ленте</p>
-    </header>
+    <!-- ПОЛУПРОЗРАЧНАЯ КОЛОНКА -->
+    <div class="content-overlay">
+      <header class="site-header text-center pt-5 pb-4">
+        <h1 class="logo">Νέα Хедлайн</h1>
+        <p class="tagline">Главные новости в одной ленте</p>
+      </header>
 
-    <main class="feed-container">
-      {% block content %}{% endblock %}
-    </main>
+      <main class="feed-container">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const images = [
+          "{% static 'images/Commercial-Sea-Port-in-the-Pacific-city-of-Vladivostok.jpg' %}",
+          "{% static 'images/GettyImages-2162291024-1-2048x1365.jpeg' %}",
+          "{% static 'images/Oil-production-in-the-Republic-of-Tatarstan.jpg' %}",
+          "{% static 'images/Russia-Putin.jpg' %}",
+          "{% static 'images/Russia-Ukraine-War-Poland.jpg' %}",
+          "{% static 'images/South-Caucasus.jpg' %}"
+        ];
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+        document.querySelector('.gradient-bg').style.backgroundImage = `url('${randomImage}')`;
+      });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>

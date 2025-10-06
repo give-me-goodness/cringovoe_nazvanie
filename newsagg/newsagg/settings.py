@@ -89,5 +89,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / "aggregator"/ "static"]
+# Правильные пути к статическим файлам
+STATICFILES_DIRS = [
+    BASE_DIR / "aggregator" / "static",  # путь к статике приложения aggregator
+    BASE_DIR / "static",  # если нужна общая папка static на уровне проекта
+]
