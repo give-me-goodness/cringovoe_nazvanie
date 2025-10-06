@@ -4,24 +4,78 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}pulse{% endblock %}</title>
+    <title>{% block title %}Νέα Хедлайн{% endblock %}</title>
 
-    <!-- Шрифт и стили -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     <link href="{% static 'aggregator/css/site.css' %}" rel="stylesheet">
   </head>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const tabActual = document.getElementById('tab-actual');
+        const tabLenta = document.getElementById('tab-lenta');
+        const contentActual = document.getElementById('content-actual');
+        const contentLenta = document.getElementById('content-lenta');
+
+        tabActual.addEventListener('click', function(e) {
+          e.preventDefault();
+          tabActual.classList.add('active');
+          tabLenta.classList.remove('active');
+          contentActual.classList.add('active');
+          contentLenta.classList.remove('active');
+        });
+
+        tabLenta.addEventListener('click', function(e) {
+          e.preventDefault();
+          tabLenta.classList.add('active');
+          tabActual.classList.remove('active');
+          contentLenta.classList.add('active');
+          contentActual.classList.remove('active');
+        });
+
+        // Новый код для фильтров: переключение active, очистка перед запросом, disable во время HTMX
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const lentaFeed = document.querySelector('#lenta-feed');
+
+        filterButtons.forEach(button => {
+          button.addEventListener('click', function(e) {
+            // Переключение active
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+
+            // Очистка ленты перед запросом (предотвращает дубликаты)
+            if (lentaFeed) {
+              lentaFeed.innerHTML = '<div class="text-center py-3 text-muted">Загрузка...</div>';
+            }
+
+            // Disable кнопок, чтобы избежать спама кликов (race conditions)
+            filterButtons.forEach(btn => btn.disabled = true);
+          });
+        });
+
+        // Re-enable кнопок после успешного HTMX-swap
+        document.body.addEventListener('htmx:afterSwap', function(e) {
+          if (e.detail.target && e.detail.target.id === 'lenta-feed') {
+            filterButtons.forEach(btn => btn.disabled = false);
+          }
+        });
+      });
+    </script>
   <body>
-    <header class="site-header text-center py-4">
-      <h1 class="logo">pulse</h1>
+    <div class="gradient-bg"></div>
+
+    <header class="site-header text-center pt-5 pb-4">
+      <h1 class="logo">Νέα Хедлайн</h1>
+      <p class="tagline">Главные новости в одной ленте</p>
     </header>
 
     <main class="feed-container">
       {% block content %}{% endblock %}
     </main>
-
-    <div class="gradient-bg"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   </body>

@@ -1,28 +1,83 @@
 {% extends "base.html" %}
-{% block title %}pulse{% endblock %}
+{% load static %}
+{% block title %}Νέα Хедлайн - Лента{% endblock %}
 
 {% block content %}
-<div class="news-feed">
-  {% for item in news %}
-  <article class="news-card"
-           hx-get="{% url 'news_detail_card' item.id %}"
-           hx-target="#modal-body"
-           hx-trigger="click"
-           data-bs-toggle="modal"
-           data-bs-target="#newsModal">
-    <p class="summary">{{ item.summary }}</p>
-    <span class="meta">{{ item.source.name }} • {{ item.published_date|date:"d M Y, H:i" }}</span>
-  </article>
-  {% empty %}
-    <div class="text-center text-muted py-5">Пока новостей нет</div>
-  {% endfor %}
+
+<div class="segmented-control-container">
+  <div class="segmented-control">
+    <a href="#" id="tab-actual" class="active">Актуальное</a>
+    <a href="#" id="tab-lenta">Лента</a>
+  </div>
+</div>
+
+<div class="tabs-content">
+
+  <div id="content-actual" class="tab-pane active">
+    <div class="news-feed">
+      {% for item in actual_news %}
+      <article class="news-card"
+               hx-get="{% url 'news_detail_card' item.id %}"
+               hx-target="#modal-body"
+               hx-trigger="click"
+               data-bs-toggle="modal"
+               data-bs-target="#newsModal">
+        <div class="summary">
+          <p>{{ item.summary }}</p>
+        </div>
+        <div class="meta">
+          <strong>{{ item.source.name }}</strong> • {{ item.published_date|date:"d M Y, H:i" }}
+        </div>
+      </article>
+      {% empty %}
+        <div class="text-center text-muted py-5">
+            <h4>Новостей пока нет</h4>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div id="content-lenta" class="tab-pane">
+    <div class="filter-bar">
+      <div class="filter-buttons">
+        <button class="filter-btn {% if not active_filter %}active{% endif %}"
+                hx-get="{% url 'news_list' %}?source=all"
+                hx-target="#lenta-feed"
+                hx-swap="innerHTML"
+                hx-indicator="#loading-indicator">
+          Все
+        </button>
+        {% for source in sources %}
+        <button class="filter-btn {% if active_filter == source.username %}active{% endif %}"
+                hx-get="{% url 'news_list' %}?source={{ source.username }}"
+                hx-target="#lenta-feed"
+                hx-swap="innerHTML"
+                hx-indicator="#loading-indicator">
+          {{ source.name }}
+        </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="news-feed" id="lenta-feed">
+      {% include 'aggregator/news_feed_lenta.html' with lenta_news=lenta_news %}
+      <!-- Индикатор загрузки (показывается во время запроса) -->
+      <div id="loading-indicator" class="htmx-indicator text-center py-3 text-muted" style="display: none;">
+        Загрузка...
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <div class="modal fade" id="newsModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body" id="modal-body"></div>
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
     </div>
-  </div>
 </div>
 {% endblock %}

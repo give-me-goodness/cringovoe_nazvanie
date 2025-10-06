@@ -1,0 +1,19 @@
+{% for item in lenta_news %}
+<article class="news-card"
+         hx-get="{% url 'news_detail_card' item.id %}"
+         hx-target="#modal-body"
+         hx-trigger="click"
+         data-bs-toggle="modal"
+         data-bs-target="#newsModal">
+  <div class="summary">
+    <p>{{ item.summary }}</p>
+  </div>
+  <div class="meta">
+    <strong>{{ item.source.name }}</strong> • {{ item.published_date|date:"d M Y, H:i" }}
+  </div>
+</article>
+{% empty %}
+  <div class="text-center text-muted py-5">
+    <p>По вашему запросу новостей не найдено.</p>
+  </div>
+{% endfor %}
