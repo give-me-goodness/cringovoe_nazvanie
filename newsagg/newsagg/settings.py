@@ -94,3 +94,11 @@ STATICFILES_DIRS = [
     BASE_DIR / "aggregator" / "static",  # путь к статике приложения aggregator
     BASE_DIR / "static",  # если нужна общая папка static на уровне проекта
 ]
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+os.makedirs(os.path.join(MEDIA_ROOT, 'news_media'), exist_ok=True)
+
+os.makedirs(os.path.join(MEDIA_ROOT, 'media_thumbnails'), exist_ok=True)
