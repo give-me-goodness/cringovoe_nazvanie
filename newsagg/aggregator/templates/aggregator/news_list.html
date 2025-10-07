@@ -22,6 +22,17 @@
                hx-trigger="click"
                data-bs-toggle="modal"
                data-bs-target="#newsModal">
+
+        {% if item.media %}
+        <div class="media-indicator">
+          {% if item.media_type == 'image' %}
+            <span class="media-badge"></span>
+          {% elif item.media_type == 'video' %}
+            <span class="media-badge"></span>
+          {% endif %}
+        </div>
+        {% endif %}
+        
         <div class="summary">
           <p>{{ item.summary }}</p>
         </div>

@@ -28,7 +28,7 @@ body {
   background-repeat: no-repeat;
   z-index: -1;
   /* Лёгкий тёмный overlay для всей страницы (чтобы текст не сливался) */
-  //background-color: rgba(0, 0, 0, 0.5); /* Прозрачность — подкорректируй под фото */
+  /* background-color: rgba(0, 0, 0, 0.5); */ /* Прозрачность — подкорректируй под фото */
   /*!* Fallback на старый градиент, если фото не загрузится *!*/
   /*background: linear-gradient(135deg, rgba(220, 235, 255, 0.6), rgba(255, 240, 245, 0.6), rgba(245, 245, 255, 0.6)),*/
   /*            url("/static/images/South-Caucasus.jpg");*/
@@ -73,6 +73,7 @@ body {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.03); /* Минимальная тень */
   transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out;
   cursor: pointer;
+  position: relative;
 }
 
 .news-card:hover {
@@ -98,6 +99,50 @@ body {
 .news-card .meta strong {
   color: #556049;
   font-weight: 600;
+}
+
+/* --- СТИЛИ ДЛЯ МЕДИА --- */
+.media-indicator {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+}
+
+.media-badge {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 6px 10px;
+  border-radius: 16px;
+  font-size: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid #F0F0F0;
+}
+
+.news-media {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.media-item {
+  margin-bottom: 1.5rem;
+}
+
+.news-image {
+  max-height: 400px;
+  max-width: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 1px solid #F0F0F0;
+}
+
+.news-video {
+  max-height: 400px;
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 1px solid #F0F0F0;
+  background: #000;
 }
 
 /* --- МОДАЛЬНОЕ ОКНО И ПОЛНЫЙ ТЕКСТ --- */

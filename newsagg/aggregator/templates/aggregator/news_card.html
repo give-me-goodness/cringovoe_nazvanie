@@ -1,6 +1,32 @@
 <div class="news-full">
   <h2>{{ item.title }}</h2>
   <div class="meta mb-3">{{ item.source.name }} • {{ item.published_date|date:"d M Y, H:i" }}</div>
+  
+  {% if item.media %}
+  <div class="news-media mb-4">
+    {% if item.media_type == 'image' %}
+      {% for media in item.media_files.all %}
+        {% if media.is_image %}
+        <div class="media-item">
+          <img src="{{ media.file.url }}" alt="{{ item.title }}" class="news-image img-fluid rounded">
+        </div>
+        {% endif %}
+      {% endfor %}
+    {% elif item.media_type == 'video' %}
+      {% for media in item.media_files.all %}
+        {% if media.is_video %}
+        <div class="media-item">
+          <video controls class="news-video w-100 rounded">
+            <source src="{{ media.file.url }}" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+          </video>
+        </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  </div>
+  {% endif %}
+  
   <div class="content">
     {{ item.content|linebreaks }}
   </div>

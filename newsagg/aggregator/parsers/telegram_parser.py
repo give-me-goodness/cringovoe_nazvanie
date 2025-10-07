@@ -45,14 +45,14 @@ class TelegramParser(BaseParser):
                         offset_date=since_date
                     ):
                         if message.text and len(message.text.strip()) > 50:
-                            has_media, media_type, media_files = await self._process_media(message)
+                            media, media_type, media_files = await self._process_media(message)
                             news_data = {
                                 'title': self._generate_title(message.text),
                                 'content': self.clean_text(message.text),
                                 'url': f"https://t.me/{self.source.username}/{message.id}",
                                 'published_date': message.date,
                                 'summary': self._generate_summary(message.text),
-                                'has_media': has_media,
+                                'media': media,
                                 'media_type': media_type,
                                 'media_files': media_files
                             }
@@ -68,13 +68,13 @@ class TelegramParser(BaseParser):
 
     async def _process_media(self, message) -> tuple:
         """Обработка медиафайлов сообщения"""
-        has_media = False
+        media = False
         media_type = 'none'
         media_files = []
 
         try:
             if message.media:
-                has_media = True
+                media = True
 
                 if hasattr(message.media, 'photo'):
                     media_type = 'image'
@@ -92,7 +92,7 @@ class TelegramParser(BaseParser):
         except Exception as e:
             print(f"Ошибка обработки медиа: {e}")
 
-        return has_media, media_type, media_files
+        return media, media_type, media_files
 
     async def _download_media(self, message, file_type: str) -> List[Dict]:
         """Скачивание медиафайлов"""
@@ -148,7 +148,7 @@ class TelegramParser(BaseParser):
             if not news_item:
                 return None
 
-            if news_data.get('has_media') and news_data.get('media_files'):
+            if news_data.get('media') and news_data.get('media_files'):
                 for media_file in news_data['media_files']:
                     try:
                         # Создаем Django File объект из бинарных данных
