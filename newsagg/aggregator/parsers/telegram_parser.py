@@ -4,8 +4,14 @@ from typing import List, Dict
 
 from .base_parser import BaseParser
 
+
 class TelegramParser(BaseParser):
     """Парсер Telegram каналов"""
+
+    def __init__(self, source):
+        super().__init__(source)
+        self.api_id = "25958394"
+        self.api_hash = "e8e5db077b49e97192f08cd90a9494b2"
 
     def parse(self) -> List[Dict]:
         """Синхронный метод парсинга (запускает асинхронный)"""
@@ -25,7 +31,7 @@ class TelegramParser(BaseParser):
 
             # Настройки Telegram API (вынеси в settings.py позже)
 
-            client = TelegramClient('session_name', api_id, api_hash)
+            client = TelegramClient('session_name', self.api_id, self.api_hash)
 
             async with client:
                 since_date = datetime.now() - timedelta(hours=24)
