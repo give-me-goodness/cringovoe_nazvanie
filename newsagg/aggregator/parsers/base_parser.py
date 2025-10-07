@@ -37,7 +37,9 @@ class BaseParser(abc.ABC):
                 source=self.source,
                 url=news_data["url"],
                 published_date=news_data["published_date"],
-                summary=news_data.get('summary', '')
+                summary=news_data.get('summary', ''),
+                has_media=news_data.get('has_media', False),
+                media_type=news_data.get('media_type', 'none')
             )
             logger.info(f"Новость сохранена: {news_data['title'][:100]}")
             return news_item
