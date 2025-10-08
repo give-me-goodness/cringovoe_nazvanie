@@ -178,10 +178,13 @@ class TelegramParser(BaseParser):
 
     def _generate_title(self, text: str) -> str:
         """Генерация заголовка из текста сообщения"""
-        return text[:50].strip() + ('...' if len(text) > 50 else '')
+        return text[:300].strip() + ('...' if len(text) > 300 else '')
 
     def _generate_summary(self, text: str) -> str:
         """Генерация краткого описания (2-3 предложения)"""
         sentences = text.split('.')
         summary = '.'.join(sentences[:3]) + '.'
-        return summary[:200] + ('...' if len(summary) > 200 else '')
+        return summary[:300] + ('...' if len(summary) > 300 else '')
+
+    def __call__(self, *args, **kwds):
+        return super().__call__(*args, **kwds)
