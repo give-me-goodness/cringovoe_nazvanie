@@ -46,18 +46,31 @@ class TelegramParser(BaseParser):
                     ):
                         if message.text and len(message.text.strip()) > 50:
                             media, media_type, media_files = await self._process_media(message)
+
+                            content = self.clean_text(message.text)
+
+                            # Проверяем, является ли источник иноагентом
+                            if self.source.name.strip().endswith('*'):
+                                disclaimer = (
+                                    "Данное сообщение (материал) создано и (или) распространено "
+                                    "иностранным средством массовой информации, выполняющим функции "
+                                    "иностранного агента, и (или) российским юридическим лицом, "
+                                    "выполняющим функции иностранного агента.\n\n"
+                                )
+                                content = disclaimer + content
+
                             news_data = {
                                 'title': self._generate_title(message.text),
-                                'content': self.clean_text(message.text),
+                                'content': content,
                                 'url': f"https://t.me/{self.source.username}/{message.id}",
                                 'published_date': message.date,
                                 'summary': self._generate_summary(message.text),
                                 'media': media,
                                 'media_type': media_type,
-                                'media_files': media_files
+                                'media_files': media_files,
                             }
-                            news_items.append(news_data)
 
+                            news_items.append(news_data)
                     print(f"Telegram: найдено {len(news_items)} новостей из {self.source.name}")
                 except ChannelPrivateError:
                     print(f"Канал {self.source.username} приватный или недоступен")
@@ -80,7 +93,7 @@ class TelegramParser(BaseParser):
                     media_type = 'image'
                     media_files = await self._download_media(message, 'image')
 
-                elif (hasattr(message.media, 'document') and 
+                elif (hasattr(message.media, 'document') and
                       hasattr(message.media.document, 'mime_type') and
                       message.media.document.mime_type.startswith('video')):
                     media_type = 'video'
@@ -153,7 +166,7 @@ class TelegramParser(BaseParser):
                     try:
                         # Создаем Django File объект из бинарных данных
                         django_file = ContentFile(
-                            media_file['file_data'], 
+                            media_file['file_data'],
                             name=media_file['filename']
                         )
 
