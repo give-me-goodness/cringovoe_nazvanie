@@ -1,47 +1,59 @@
+from typing import List
 from django.utils import timezone
 from aggregator.models import NewsSource
-
-from .telegram_parser import TelegramParser
+from .rss_parser import RSSParser
+import asyncio
 
 
 class ParserManager:
-    """Менеджер для управления парсерами"""
+    """Упрощенный менеджер парсеров только с RSS"""
 
     def __init__(self):
         self.parsers = {
-            'telegram': TelegramParser,
+            'rss': RSSParser,
         }
 
     def get_parser(self, source: NewsSource):
-        """Получение парсера для источника"""
         parser_class = self.parsers.get(source.source_type)
         if parser_class:
             return parser_class(source)
         return None
 
     def parse_all_sources(self) -> int:
-        """Парсинг всех активных источников"""
-        total_news = 0
-        active_sources = NewsSource.objects.filter(is_active=True)
+        """Синхронный парсинг всех источников"""
+        import time
+        start_time = time.time()
 
-        print(f"Начинаем парсинг {active_sources.count()} источников...")
+        try:
+            active_sources = NewsSource.objects.filter(is_active=True)
+            print(f"Запуск парсинга {len(active_sources)} RSS источников...")
 
-        for source in active_sources:
-            parser = self.get_parser(source)
-            if parser:
-                try:
-                    news_items = parser.parse()
-                    for news_data in news_items:
-                        parser.save_news_item(news_data)
-                    total_news += len(news_items)
+            total_news = 0
 
-                    source.last_parsed = timezone.now()
-                    source.save()
+            for source in active_sources:
+                parser = self.get_parser(source)
+                if parser:
+                    try:
+                        news_items = parser.parse()
+                        saved_count = 0
 
-                    print(f"{source.name}: обработано {len(news_items)} новостей")
+                        for news_data in news_items:
+                            if parser.save_news_item(news_data):
+                                saved_count += 1
 
-                except Exception as e:
-                    print(f"Ошибка парсинга {source.name}: {e}")
+                        source.last_parsed = timezone.now()
+                        source.save()
 
-        print(f"Парсинг завершен! Всего добавлено {total_news} новостей")
-        return total_news
+                        print(f"{source.name}: {saved_count} новостей")
+                        total_news += saved_count
+
+                    except Exception as e:
+                        print(f"Ошибка парсинга {source.name}: {e}")
+
+            duration = time.time() - start_time
+            print(f"Парсинг завершен! {total_news} новостей за {duration:.1f} секунд")
+            return total_news
+
+        except Exception as e:
+            print(f"Критическая ошибка парсинга: {e}")
+            return 0
